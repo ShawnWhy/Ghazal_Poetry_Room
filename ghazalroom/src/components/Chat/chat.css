@@ -1,0 +1,174 @@
+
+
+    .sidenavchat{
+        border:double black;
+        position:fixed;
+        bottom:30%;
+        right:2%;
+        z-index:1;
+        background-color:white;
+        width:20%;
+        text-align:center;
+    }
+
+
+.allContainer{
+    background-image:url("./islamicpatternss.svg");
+    background-repeat:repeat;
+    text-align:center;
+    position:fixed; 
+    width:100%;
+    height:100%;
+    
+}
+
+.scroll{
+    width: 60%;
+
+    position:fixed;
+    left:20%;
+    top:10%;
+    text-align:center;
+
+}
+.topScroll{
+    background-color:rgb(121, 90, 7);
+    background-image:url("./islamic\ patterns.png");
+    border:3px solid black;
+    background-repeat:repeat;
+    height:50px;
+
+}
+.bottomScroll{
+    background-color:rgb(121, 90, 7);
+    background-image:url("./islamic\ patterns.png");
+    border:3px solid black;
+    background-repeat:repeat;
+    height:50px;
+
+}
+
+.nameDiv{
+    position:relative;
+    color:white;
+    top:-50%;
+}
+.nameQuestion{
+    position:relative;
+    top:10%;
+}
+.nameForm{
+    position:relative;
+    top:-80%;
+}
+.nameInputDiv{
+    width:60%;
+    background-color:white;
+    border: double black;
+    text-align: center; 
+   
+}
+.nameinput{
+    margin:auto;
+    width:80%;
+}
+
+
+.visible{
+    visibility:visible
+}
+.invisible{
+    visibility: collapse;
+    width:0;
+    height:0;
+
+}
+
+@keyframes scroll{
+    from{height:0}
+    to{height:500px}
+}
+
+.scrollSheet{
+    width:90%;
+    background-color:whitesmoke;
+    border: double black;
+    margin-left:5%;
+    height:0;
+}
+
+.scrollSheet2{
+animation:scroll 1s both;
+
+
+}
+
+
+.messageBox::-webkit-scrollbar {
+    display: none;
+  }
+  .messageBox{
+    border:double black;
+    width:100%;
+    overflow:scroll;
+    text-align: left;
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
+
+}
+.onChatbox{
+    height:200px;
+}
+
+
+.rules{
+    background-color:rgba(0, 0, 0, 0.452);
+    /* opacity: 80%; */
+    position:fixed;
+    z-index:2;
+    text-align:center;
+    height:100%;
+    width:100%;
+}
+
+.coupletInput{
+    position:relative;
+    top:60%;
+    width:100%;
+}
+
+.firstCoupletceInput{
+    width:100%;
+}
+.subsequentCoupletceInput{
+    width:100%;
+}
+
+
+
+
+
+
+
+  
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+  @media only screen and (max-width: 480px){
+  
+  
+
+
+}

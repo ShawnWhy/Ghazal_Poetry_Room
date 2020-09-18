@@ -1,0 +1,26 @@
+{
+  "name": "ghazal_poetry_room",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "react": "^16.13.1",
+    "socket.io-client": "^2.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShawnWhy/Ghazal_Poetry_Room.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ShawnWhy/Ghazal_Poetry_Room/issues"
+  },
+  "homepage": "https://github.com/ShawnWhy/Ghazal_Poetry_Room#readme"
+}

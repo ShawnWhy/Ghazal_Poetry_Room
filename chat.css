@@ -1,0 +1,628 @@
+/* * {
+    box-sizing: border-box;
+}
+
+.sidenavchat {
+    text-align: center;
+    padding: 20px;
+    border-radius: 8px;
+    position: fixed;
+    z-index: 1;
+    right: 2%;
+    top: 50%;
+    min-width: 30vw;
+    background: #9BA5BE;
+     overflow-x: hidden;
+    padding: 8px 0;
+}
+
+.sidenavchat a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #2196F3;
+    display: block;
+}
+
+.sidenavchat a:hover {
+    color: #064579;
+}
+
+.mainchat {
+    margin-left: 140px;
+    /* Same width as the sidebar + left position in px */
+    /* font-size: 28px; */
+    /* Increased text to enable scrolling */
+    /* padding: 0px 10px;
+} */
+
+/* .remove ul li {
+    text-decoration: none;
+    list-style-type: none;
+}
+
+.chatBtn {
+    padding: 3px 8px;
+    border-radius: 8px;
+    background-color: #000;
+    color: #fff;
+    border: 2px solid #000;
+    margin-top: 10px;
+    outline: none;
+    position:relative;
+        z-index: -1
+}
+
+.chatBtn:hover {
+    background-color: #fff;
+    color: #000;
+    outline: none;
+    box-shadow: 3px black;
+}
+
+.chat-title {
+    margin-bottom: 50px;
+} */ */
+
+/* @media screen and (max-height: 450px) {
+    .sidenavchat {
+        padding-top: 15px;
+    }
+    .sidenavchat a {
+        font-size: 18px;
+    }
+} */
+
+.exterior{
+  
+    
+}
+.leftCurtain{
+    background-image: url("./left.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    width:47%;
+    height:100%;
+    
+    position:fixed;
+    left:0;
+    z-index:1;
+}
+.leftcurtainOn{
+    animation:leftCurtain 2s forwards ;
+
+
+}
+.rightCurtainOn{
+    animation:rightCurtain 2s forwards ;
+}
+.rightCurtain{
+    background-image: url("./right.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    width:47%;
+    height:100%;
+    position:fixed;
+    right:0;
+    z-index:1
+}
+
+
+.allContainer{
+    background-color:black;
+    background-image:url("./background.jpg");
+    background-repeat:no-repeat;
+    background-size:auto 100%;
+    background-position-x:center;
+    text-align:center;
+    position:fixed;
+    width:100%;
+    height:100%;
+}
+
+.nameInputDiv{
+    width:40%;
+    margin:auto;
+    position:relative;
+    top:40px;
+    z-index:2;
+    background-color:white;
+    border: double black;
+    text-align: center;
+}
+.nameinput{
+    margin:auto;
+    width:80%;
+}
+
+
+.visible{
+    visibility:visible
+}
+.invisible{
+    visibility: collapse;
+    width:0;
+    height:0;
+
+}
+
+
+.messageBox::-webkit-scrollbar {
+    display: none;
+  }
+  .messageBox{
+    border:double black;
+    width:100%;
+    overflow:scroll;
+    text-align: left;
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
+
+}
+.onChatbox{
+    height:300px;
+}
+
+.finalPoemModal{
+    background-color:rgba(0, 0, 0, 0.452);
+    /* opacity: 80%; */
+    position:fixed;
+    z-index:2;
+    text-align:center;
+    height:100%;
+    width:100%;
+}
+.rules{
+    background-color:rgba(0, 0, 0, 0.452);
+    /* opacity: 80%; */
+    position:fixed;
+    z-index:2;
+    text-align:center;
+    height:100%;
+    width:100%;
+}
+.finalPoemModalContent{
+    position:fixed;
+    background-color:white;
+    top:30%;
+    left:25%;
+    width:50%;
+    height:60%;
+    overflow: hidden;
+}
+.rulesContent{
+    position:fixed;
+    background-color:white;
+    top:30%;
+    left:25%;
+    width:50%;
+    height:60%;
+    overflow: hidden;
+}
+.nameWarning{
+    position:relative;
+}
+
+
+.interior{
+  
+    position:relative;
+    widows: 100%;
+    height:100%;
+    margin:auto;
+    z-index:0;
+    text-align: center;
+}
+
+.closeModal{
+    border:1px solid black;
+    background-color:white;
+    
+    position:absolute;
+    padding:3%;
+
+    right:5%;
+    top:1%;
+}
+
+.gameButton{
+    margin:1%;
+}
+p{
+    position:relative;
+    top:15%;
+}
+.closeModal:hover{
+    background-color:black;
+    color:white;
+}
+
+.closeRules{
+    border:1px solid black;
+    background-color:white;
+    position:absolute;
+    padding:3%;
+
+    right:5%;
+    top:1%;
+}
+.closeRules:hover{
+    background-color:black;
+    color:white;
+}
+
+.openRulesButton{
+    float:right;
+}
+
+
+@keyframes rightCurtain {
+    from {
+        transform:translatex(0px)
+    }
+    90%{
+        transform:translatex(500px)
+
+    }
+    100%
+        {
+            visibility:collaps;
+            transform:translatex(500px)
+        }
+  }
+
+  
+@keyframes leftCurtain {
+    from {
+        transform:translatex(0px)
+    }
+    90%{
+        transform:translatex(-500px)
+
+    }
+    100%
+        {
+            visibility:collaps;
+            transform:translatex(-500px)
+        }
+  }
+  a{
+      color:black;
+  }
+
+  .sidenavchat{
+      border:double black;
+      position:fixed;
+      top:2%;
+      right:11%;
+      z-index:1;
+      background-color:white;
+      width:20%;
+      text-align:center;
+  }
+
+
+  .toLeft{
+      width:60%;
+      position:relative;
+      left:1%;
+      margin:3%;
+
+      
+      
+  }
+
+  .toRight{
+      width:60%;
+        position:relative;
+        right:-37%;
+        margin:3%;
+
+  }
+
+  .table{
+      /* background-image:url("./table2.png");
+      background-repeat:no-repeat;
+      background-size:100%; */
+      position:fixed;
+      bottom:6%;
+      width:40%;
+      left:30%;
+      margin:auto;
+      background-color:white;
+      border:double black;
+
+  }
+
+  .display{
+      margin:1%;
+  }
+  .sentenceInput{
+      width:80%;
+  }
+  @keyframes fallAnimation{
+    0% {bottom:100% }
+    100%{bottom:1%}
+}
+@keyframes fallAnimation2{
+    0% {bottom:100% }
+    100%{bottom:10%}
+}
+
+
+  .leonora{
+    height:50%;
+    widows: 10%;
+    background-image:url("./Leonora.png");
+    background-repeat:no-repeat;
+    background-size: contain;
+    position:fixed;
+    z-index:0;
+    width:20%;
+    margin:2%;
+    left:15%;
+    animation:fallAnimation 1s both
+    
+}
+
+.max{
+    height:50%;
+    widows: 10%;
+    background-image:url("./Max.png");
+    background-repeat:no-repeat;
+    background-size: contain;
+    position:fixed;
+    z-index:0;
+    width:15%;
+    margin:2%;
+    left:25%;
+    animation:fallAnimation2 1s both;
+    animation-delay:.5s
+
+}
+.Andre{
+    height:50%;
+    widows: 10%;
+    background-image:url("./andre.png");
+    background-repeat:no-repeat;
+    background-size: contain;
+    position:fixed;
+    z-index:0;
+    width:15%;
+    margin:2%;
+    right:22%;
+    animation:fallAnimation2  1s both;
+    animation-delay: 1s
+
+}
+.marcel{
+    height:50%;
+    widows: 10%;
+    background-image:url("./marcel.png");
+    background-repeat:no-repeat;
+    background-size: contain;
+    position:fixed;
+    z-index:0;
+    width:20%;
+    margin:2%;
+    right:5%;
+
+    animation:fallAnimation 1s both;
+    animation-delay:1.5s;
+
+}
+.title{
+    background-color:white;
+    border: double black;
+    width:30%;
+    margin:auto;
+    overflow: hidden;
+}
+.titleAnimate{
+
+    animation:titleAnimate 1s both
+}
+.tableAnimate{
+    animation:tableAnimate 1s both
+}
+
+@keyframes titleAnimate{
+    0% {transform:scaleX(0);
+    transform-origin: left;}
+    100%{transform:scaleX(1);
+        transform-origin: left}
+}
+@keyframes tableAnimate{
+    0% {transform:scaleX(0);
+    transform-origin: right;}
+    100%{transform:scaleX(1);
+        transform-origin: right}
+}
+.titleText{
+    animation:titleText 1s both;
+    animation-delay: 1s;
+
+}
+.tableContentText{
+    animation:TableContentText 1s both;
+    animation-delay: 1s;
+
+}
+@keyframes titleText{
+    0%{
+        visibility:collapse
+    }
+    100%{
+        visibility:visible
+    }
+}
+@keyframes tableContentText{
+    0%{
+        visibility:collapse
+    }
+    100%{
+        visibility:visible
+    }
+}
+
+
+
+
+
+
+
+
+
+
+  @media only screen and (max-width: 480px){
+  
+    .messageBox{
+        border:double black;
+        width:100%;
+        overflow:scroll;
+        text-align:left;
+        max-height:30%;
+        overflow:scroll;
+  
+    }
+    li{
+        position:relative;
+        left:-70%;
+
+    }
+   
+
+    
+    .leftCurtain{
+        background-image: url("./left.png");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        width:47%;
+        height:100%;
+        
+        position:fixed;
+        left:0;
+        z-index:1;
+    }
+    .rightCurtain{
+        background-image: url("./right.png");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        width:47%;
+        height:100%;
+        position:fixed;
+        right:0;
+        z-index:1
+    }
+    .table{
+        /* background-image:url("./table2.png");
+        background-repeat:no-repeat;
+        background-size:auto 100%; */
+        position:fixed;
+        bottom:5%;
+        z-index:1;
+        left:0;
+        width:100%;
+        height:10%;
+  
+    }
+
+    .allContainer{
+        background-size:auto 100%;
+        background-position: center;
+    }
+    @keyframes fallAnimation{
+        0% {bottom:100% }
+        100%{bottom:-15%}
+    }
+    @keyframes fallAnimation2{
+        0% {bottom:100% }
+        100%{bottom:-20%}
+
+
+  }
+
+  .leonora{
+    height:50%;
+    background-image:url("./Leonora.png");
+    background-repeat:no-repeat;
+    background-size: contain;
+    position:fixed;
+    z-index:1;
+    width:15%;
+    margin:2%;
+    left:5%;
+    animation:fallAnimation 1s both
+    
+}
+
+.max{
+    height:50%;
+    background-image:url("./Max.png");
+    background-repeat:no-repeat;
+    background-size: contain;
+    position:fixed;
+    z-index:1;
+    width:15%;
+    margin:2%;
+    left:20%;
+    animation:fallAnimation2 1s both;
+    animation-delay:.5s
+
+}
+.Andre{
+    height:50%;
+    background-image:url("./andre.png");
+    background-repeat:no-repeat;
+    background-size: contain;
+    position:fixed;
+    z-index:1;
+    width:15%;
+    margin:2%;
+    right:15%;
+    animation:fallAnimation2  1s both;
+    animation-delay: 1s
+
+}
+.marcel{
+    height:50%;
+    background-image:url("./marcel.png");
+    background-repeat:no-repeat;
+    background-size: contain;
+    position:fixed;
+    z-index:1;
+    width:20%;
+    margin:2%;
+    right:0%;
+
+    animation:fallAnimation 1s both;
+    animation-delay:1.5s;
+
+}
+.title{
+    background-color:white;
+    border: double black;
+    margin:auto;
+    width:50%;
+    position:relative;
+    top:5%;
+    font-size:medium;
+    z-index:1
+
+    
+}
+ul{ list-style-type: none; }
+
+ 
+
+.largeChat{
+    left:10%;
+width:80%
+}
+
+.centeredLi{
+    left:-10%;
+
+}
+
+}
