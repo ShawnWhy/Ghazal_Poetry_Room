@@ -3,7 +3,6 @@ import React, { useEffect, useState, useRef } from "react";
 // import API from "../../utils/API";
 import Style from "./chat.css"
 // import Moment from "react-moment";
-import reactDOM from "react-dom";
 import io from "socket.io-client";
 // import { set } from "mongoose";
 import openSocket from 'socket.io-client';
@@ -40,12 +39,7 @@ const [firstCoupletInput, setFirstCoupletInput]=useState("off")
 const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
  //username
  const [poetName, setPoetName]=useState("");
-//set if it's teh client's turn to play
-  const [turn, setTurn] = useState("off")
-//variable used to test and set username
-  const [nameWarning, setNameWarning] = useState("off");
   const [nameWarningText, setNameWarningText]=useState("");
-//this is the sentence used to pass on and play the game
   const [couplet, setCouplet] = useState("")
 //this is used to display the first sentence  
   const [currentdisplay, setCurrentDisplay]=useState("Write your first sentence please")
@@ -85,7 +79,7 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
     });}
 
     socket.on("rejected",()=>{
-      console.log("namealreadyexist")
+      setNameWarningText("poet name already taken")
     })
     //set all the users in the chatroom 
     socket.on("users", (users) => {
@@ -107,27 +101,59 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
 //the first thing the player sees when logging on is 
 //to get the current player 
 //and the already established list
-    socket.on("start", (playerName)=>{
+    socket.on("start", (info)=>{
       console.log("currentplayer")
-      console.log(playerName)
-      setCurrentPlayer(playerName)
-      if(playerName===poetName){
-        setFirstCoupletInput("on");
-      }
-    })
-    socket.on("gameInfo",(info)=>{
-      console.log("gameinfo")
-      console.log(info)
-      setCurrentPlayer(info.currentPlayer);
-      setAllCouplets(info.couplets); 
-      console.log(currentPlayer)
+      console.log(info.currentPlayer)
+      setCurrentPlayer(info.currentPlayer)
+      setAllCouplets(info.couplets)
       setSession("on"); 
       setTimeout(() => {
         setInstructionDisplayVis("on")
-        // setFirstCoupletInput("on")
-        
       }, 1500);
+      if(info.currentPlayer===poetName){
+        setTimeout(() => {
+          setFirstCoupletInput("on")
+
+          
+        }, 1500);
+        
+      }
     })
+    socket.on("play", (info)=>{
+      console.log("currentplayer")
+      console.log(info.currentPlayer)
+      setCurrentPlayer(info.currentPlayer)
+      setAllCouplets(info.couplets)
+      setRefrain(info.refrain);
+      
+        setTimeout(() => {
+          setInstructionDisplayVis("on")
+        }, 1500);
+
+      setSession("on"); 
+      if(info.currentPlayer===poetName){
+        setTimeout(() => {
+          setCoupletInputSubsequent("on")
+          setInstructionDisplayVis("on")
+
+          
+        }, 1500);
+        
+      }
+    })
+    // socket.on("gameInfo",(info)=>{
+    //   console.log("gameinfo")
+    //   console.log(info)
+    //   setCurrentPlayer(info.currentPlayer);
+    //   setAllCouplets(info.couplets); 
+    //   console.log(currentPlayer)
+    //   setSession("on"); 
+    //   setTimeout(() => {
+    //     setInstructionDisplayVis("on")
+    //     // setFirstCoupletInput("on")
+        
+    //   }, 1500);
+    // })
 
 
     // as other players connect to the server, the player's name is pushed into the list of players
@@ -145,11 +171,13 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
     socket.on("coupletBroadcast", (couplet)=>{
       console.log("couplets")
       console.log(couplet)
+      setRefrain(couplet.refrain);
       setAllCouplets((allCouplets) => [...allCouplets, couplet.couplet
       ])
+      setCurrentPlayer(couplet.playerTurn)
+
       if (couplet.playerTurn===poetName){
         setCoupletInputSubsequent("on")
-        setCurrentPlayer(couplet.playerTurn)
       }
       else{setCoupletInputSubsequent("off")}
     });
@@ -212,13 +240,16 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
         var couplet = []
         couplet.push(firstSentence);
         couplet.push(secondSentence)
-        setRefrain(firstSentenceArray[firstSentenceArray.length-1])
-        console.log(couplet)
-        console.log(refrain);
+        console.log(firstSentenceArray[firstSentenceArray.length-1])
+        var tempRefrain=firstSentenceArray[firstSentenceArray.length-1]
+        console.log(tempRefrain);
+        setRefrain(tempRefrain)
         var coupletInfo = {
           lines:couplet,
-          refrain:refrain
+          refrain:tempRefrain
         }
+        console.log("coupletinfo")
+        console.log(coupletInfo);
         socket.open();
         socket.emit("submitFirstCouplet",coupletInfo)
         setFirstCoupletInput("off")
@@ -238,12 +269,13 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
   const submitSubsequentCouplet=(event)=>{
     event.stopPropagation();
     event.preventDefault();
-    var lineOne = subsequentSentenceOne.current.value+refrain;
-    var lineTwo = subsequentSentenceTwo.current.value+refrain;
+    var lineOne = subsequentSentenceOne.current.value
+    var lineTwo = subsequentSentenceTwo.current.value+ " "+ refrain;
     console.log(lineOne + lineTwo)
     var couplet = [lineOne, lineTwo];
     socket.open();
     socket.emit("submitCouplet",couplet)
+    setCoupletInputSubsequent("off")
 
   }
   
@@ -289,15 +321,18 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
 return (
 //everything
 <div className="allContainer">
+  <div>{nameWarningText}</div>
   
   <div className="scroll">
     <div className="topScroll">
+      <p className={"ghazalTitle "+(session==="on"?"":"invisible")}><h1>Ghazal</h1></p>
     <div className={"nameDiv "+(session==="on"?"invisible":"")}>
       <form className="nameForm" onSubmit={unrollScroll}>
       <p className="nameQuestion">oh poet, what would you like to be called?</p>
       <input ref={nameRef} type = "text" className="nameInputDiv"></input>
-      <p> and which room do you deem fit to enter?</p>
-      <select >
+      <p className = "roomQuestion"> and which room do you deem fit to enter?</p>
+      <select className="roomSelection" >
+        <option disabled selected value></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -312,6 +347,7 @@ return (
     <h1 className={"instruction "+(instructionDisplayVis==="on"?"":"invisible")}>{instructionDisplay}</h1>
     <div className={instructionDisplayVis==="on"?"":"invisible"}>
         currebt player: {currentPlayer}
+        refrain: {refrain}
       </div>
 
       <div className={"prevSentences "+(instructionDisplayVis==="on"?"":"invisible")}>
@@ -320,9 +356,9 @@ return (
         ):(
           <div>
             {allcouplets.map((couplet,index)=>(
-              <div>
-              <div key={index}>{couplet[0]}</div>
-              <div key={index}>{couplet[1]}</div>
+              <div key={index}className="poem">
+              <div key={index +"1"}>{couplet[0]}</div>
+              <div key={index + "2"}>{couplet[1]}</div>
               </div>
             ))}
           </div>
@@ -341,16 +377,15 @@ return (
         <input type="submit" value="submit couplet"></input>
         </form >
 
-        <form onSubmit={submitSubsequentCouplet} className={"coupletInput "+(coupletInputSubsequent==="on"?"":"invisible")}>
+        <form onSubmit={submitSubsequentCouplet} className={"coupletInput2 "+(coupletInputSubsequent==="on"?"":"invisible")}>
         <div className="subsequentCoupletceInput">
         <input ref={subsequentSentenceOne} className="lineInput" type="text"></input>
-        <div>{refrain}</div>
         </div>
         <div className="subsequentCoupletceInput">
-        <input ref={subsequentSentenceTwo} className="lineInput" type="text"></input>
-        <div>{refrain}</div>
+        <input ref={subsequentSentenceTwo} className="lineInput2" type="text"></input>
+        <div className="refrainDiv">{refrain}</div>
         </div>
-        <input type="submit" value="submit couplet"></input>
+        <input type="submi  t" value="submit couplet"></input>
       </form>
 
     </div>
@@ -396,7 +431,7 @@ return (
             
              <div className="roster ">
                {/* the roster with ghost  */}
-              <h3>players in the room</h3>
+              <h3>poets in the room</h3>
                 <ul id="users">
                
                 {users.map(({ name, id }) => (

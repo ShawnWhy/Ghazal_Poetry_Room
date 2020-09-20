@@ -26,6 +26,7 @@ const PORT = process.env.PORT || 3001 ;
   //all of the sentences
   var couplets = [["sdsdsdS", "dsdsdsdsdsdsds"] ];
   var currentPlayer="";
+  var refrain =""
 
 
 
@@ -51,33 +52,35 @@ const PORT = process.env.PORT || 3001 ;
     client.broadcast.emit("connected", user);
     io.emit("users", Object.values(users));
     var players = Object.values(users)
-   currentPlayer=players[i].name
-    client.emit("gameInfo",{
-      currentPlayer:currentPlayer,
-      couplets:couplets
-    });
-    // players.push(username)
-    // console.log("player1")
-    var players = Object.values(users)
-    // console.log(players)
-    if(players[0]){
-    // console.log(players[0].name)}
-    //if there are more than one player in the room the game automatically starts
-    if(Object.values(users).length>0){
-        // console.log("start");
-        console.log("userslistcl")
+    if(players.length<2&&refrain.length<1){
+        i=0
+        console.log("userslist")
         console.log(users)
-        var players = Object.values(users)
         console.log(players)
-        console.log(i )
+        console.log(i)
         currentPlayer=players[i].name
+        console.log(currentPlayer)
         console.log("start")
-      io.emit("start", players[i].name)
-      // i++
-      // if( i > users.length-1){
-      //   i=0;    
-      // }
-    }
+      client.emit("start", 
+      {currentPlayer:currentPlayer,
+      couplets:couplets}
+      )
+     }
+    else{
+      console.log("userslist2")
+      console.log(users)
+      var players = Object.values(users)
+      console.log(players)
+      console.log(i)
+      currentPlayer=players[i].name
+      console.log("play")
+    client.emit("play",{
+      currentPlayer:players[i].name,
+      couplets:couplets,
+      refrain:refrain})
+  
+
+    
   }
 }});
   //when a player emit a sentence, it is received here and is broadcasted to others
@@ -92,7 +95,8 @@ const PORT = process.env.PORT || 3001 ;
     //broadcasted to otheres and also emit the next player in line to others
     io.emit("sentenceBroadcast",{
       text:sentence,
-      player:players[i].name
+      player:players[i].name,
+      refrain:refrain
     })
     // console.log("server emitted sentencec")
     i++
@@ -104,12 +108,15 @@ const PORT = process.env.PORT || 3001 ;
 client.on("submitFirstCouplet", (coupletInfo)=>{
   couplets.push(coupletInfo.lines)
   var players = Object.values(users)
+  refrain=coupletInfo.refrain
   console.log(i);
   console.log(players)
+  console.log(refrain)
     currentPlayer=players[i].name
     io.emit("coupletBroadcast",{
       couplet:coupletInfo.lines,
-      playerTurn:currentPlayer
+      playerTurn:currentPlayer,
+      refrain:refrain
     })
   i++
   if(i>players.length-1){
@@ -118,13 +125,15 @@ client.on("submitFirstCouplet", (coupletInfo)=>{
 })
 client.on("submitCouplet", (couplet)=>{
   var players = Object.values(users)
-
+ 
   couplets.push(couplet)
   currentPlayer=players[i].name
 
-  io.emit("coupletBroadcast",{
+  io.emit("coupletBroadcast",{ 
     couplet:couplet,
-  playerTurn:currentPlayer  })
+  playerTurn:currentPlayer,
+refrain:refrain 
+ })
   i++
   if(i>players.length-1){
       i=0
@@ -150,6 +159,9 @@ client.on("submitCouplet", (couplet)=>{
     delete users[client.id];
 
     io.emit("disconnected", client.id);
+    if (username =  currentPlayer){
+
+    }
   });
 
 client.on("sendToGhost", (message)=>{

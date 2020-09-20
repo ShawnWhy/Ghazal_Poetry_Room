@@ -10,8 +10,13 @@
         width:20%;
         text-align:center;
     }
-
-
+.poem{
+   
+}
+.prevSentences{
+    overflow:auto;
+ 
+}
 .allContainer{
     background-image:url("./islamicpatternss.svg");
     background-repeat:repeat;
@@ -39,6 +44,12 @@
     height:50px;
 
 }
+.ghazalTitle{
+    text-aligh:center;
+    color:white;
+    position:relative;
+    bottom: 20%;
+}
 .bottomScroll{
     background-color:rgb(121, 90, 7);
     background-image:url("./islamic\ patterns.png");
@@ -51,7 +62,7 @@
 .nameDiv{
     position:relative;
     color:white;
-    top:-50%;
+    top:-40%;
 }
 .nameQuestion{
     position:relative;
@@ -59,9 +70,26 @@
 }
 .nameForm{
     position:relative;
-    top:-80%;
+    
+}
+.roomQuestion{
+    position:relative;
+    top:-15px;
+}
+.roomSelection{
+    text-align:center;
+    position:relative;
+    top:-30px;
+
+}
+.nameSubmit{
+    position:relative;
+    top:-30px;
+    left:30px;
 }
 .nameInputDiv{
+    position:relative;
+    top:-10px;
     width:60%;
     background-color:white;
     border: double black;
@@ -81,6 +109,9 @@
     visibility: collapse;
     width:0;
     height:0;
+    margin:0;
+    position:absolute;
+    z-index:0;
 
 }
 
@@ -94,6 +125,7 @@
     background-color:whitesmoke;
     border: double black;
     margin-left:5%;
+    overflow:scroll;
     height:0;
 }
 
@@ -132,9 +164,32 @@ animation:scroll 1s both;
 }
 
 .coupletInput{
-    position:relative;
-    top:60%;
+    position:absolute;
+    z-index:2;
+    top:75%;
+    left:1%;
     width:100%;
+}
+.coupletInput2{
+    position:absolute;
+    z-index:2;
+    top:75%;
+    left:10%;
+    width:100%;
+}
+.lineInput{
+    width:80%;
+}
+.lineInput2{
+    width:60%;
+    
+}
+.refrainDiv{
+    width:30%;
+}
+.secondLineDiv{
+    text-align:left;
+
 }
 
 .firstCoupletceInput{
@@ -142,7 +197,14 @@ animation:scroll 1s both;
 }
 .subsequentCoupletceInput{
     width:100%;
+    text-align: center;
+    display:flex;
 }
+
+
+
+
+
 
 
 
