@@ -130,7 +130,7 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
       }
     
     })
-    socket.on("nextPlayer",(currentPlayer)=>{
+    socket.on("nextPlayerFirst",(currentPlayer)=>{
       if(poetName===currentPlayer){
         setFirstCoupletInput("on")
       }

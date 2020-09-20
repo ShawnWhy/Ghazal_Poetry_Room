@@ -82,7 +82,7 @@ const PORT = process.env.PORT || 3001 ;
     if (usernames.indexOf(username)!==-1){
       console.log("useralreadyexists")
       client.emit("rejected")
-      // client.disconnect();
+      client.disconnect();
     }
     else{
       usernames.push(username)
@@ -103,7 +103,12 @@ const PORT = process.env.PORT || 3001 ;
       client.emit("start", 
       {currentPlayer:currentPlayer,
       couplets:couplets}
-      )}
+      
+      )
+    
+     
+    
+    }
       else{
         playerError()
       }
@@ -136,6 +141,10 @@ client.on("submitFirstCouplet", (coupletInfo)=>{
   console.log(i);
   console.log(players)
   console.log(refrain)
+  i++;
+  if(i>players.length-1){
+    i=0;
+  }
   if(players[i]){
     currentPlayer=players[i].name
     io.emit("coupletBroadcast",{
@@ -188,26 +197,33 @@ client.on("submitCouplet", (couplet)=>{
   client.on("disconnect", () => {
 
     var closedUser = users[client.id];
+    console.log("cliemt")
+    console.log(client);
     console.log("client.id......")
     console.log(client.id)
     console.log("users.....")
 
     console.log(users)
-
-
-    // username = username.username;
     console.log("closed user.....")
     console.log(closedUser)
     console.log(currentPlayer)
-  if (closedUser.name === currentPlayer){
-    delete users[client.id];
-  console.log("nextplayer")
-   nextPlayer();
-  }
-  else{
-  delete users[client.id];}
+  // if (closedUser.name === currentPlayer){
+  //   delete users[client.id];
+  // console.log("nextplayer")
+  //  nextPlayer();
+  // }
+  // else{
+  // delete users[client.id];}
+  delete users[client.id];
+
   console.log("users..........")
   console.log(users)
+  var players = Object.values(users)
+
+  if(currentPlayer.indexOf(users)==-1){
+    console.log("currentplayer is not here")
+    nextPlayer();
+  }
 
     io.emit("disconnected", client.id);
 
