@@ -80,6 +80,10 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
 
     socket.on("rejected",()=>{
       setNameWarningText("poet name already taken")
+      setTimeout(() => {
+        setNameWarningText("")
+        
+      }, 1000);
     })
     //set all the users in the chatroom 
     socket.on("users", (users) => {
@@ -113,11 +117,24 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
       if(info.currentPlayer===poetName){
         setTimeout(() => {
           setFirstCoupletInput("on")
+          setInstructionDisplay("please write the first stanza")
 
           
         }, 1500);
         
       }
+    })
+    socket.on("nextPlayer",(currentPlayer)=>{
+      if(poetName===currentPlayer){
+        setCoupletInputSubsequent("on")
+      }
+    
+    })
+    socket.on("nextPlayer",(currentPlayer)=>{
+      if(poetName===currentPlayer){
+        setFirstCoupletInput("on")
+      }
+
     })
     socket.on("play", (info)=>{
       console.log("currentplayer")
@@ -135,10 +152,12 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
         setTimeout(() => {
           setCoupletInputSubsequent("on")
           setInstructionDisplayVis("on")
-
-          
+          setInstructionDisplay("please proceed to write the next stanza")
         }, 1500);
         
+      }
+      else{
+        setInstructionDisplay("please wait")
       }
     })
     // socket.on("gameInfo",(info)=>{
@@ -167,7 +186,7 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
     //the sentence is also sent to the allsentences variable
     //if this client's username == the prodcasted name, 
     // the turn ariable is turned on and the player can type into the input div
-
+    
     socket.on("coupletBroadcast", (couplet)=>{
       console.log("couplets")
       console.log(couplet)
@@ -178,8 +197,13 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
 
       if (couplet.playerTurn===poetName){
         setCoupletInputSubsequent("on")
+        setInstructionDisplay("please proceed to write the next stanza")
       }
-      else{setCoupletInputSubsequent("off")}
+      else{setCoupletInputSubsequent("off")
+      setInstructionDisplay("please wait")
+
+        
+    }
     });
     
     //on another player's disconnect, the cient gets the emit, and rids the player
@@ -232,10 +256,12 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
     var secondSentence = firstSentenceTwo.current.value
     var firstSentenceArray = firstSentence.split(/[\s,]+/)
     var secondSentenceArray = secondSentence.split(/[\s,]+/)
+    console.log(firstSentenceArray);
+    console.log(secondSentenceArray)
     
 
 
-    if (firstSentenceArray.length>0&&secondSentenceArray.length>0){
+    if (firstSentence.length>0&&secondSentence.length>0){
       if(firstSentenceArray[firstSentenceArray.length-1]===secondSentenceArray[secondSentenceArray.length-1]){
         var couplet = []
         couplet.push(firstSentence);
@@ -253,29 +279,42 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
         socket.open();
         socket.emit("submitFirstCouplet",coupletInfo)
         setFirstCoupletInput("off")
-
-
-
       }
       else{
-        console.log("try to match the ending words of both sentences please")
+        setInstructionDisplay("try to match the ending words of both sentences please")
+        setTimeout(() => {
+          setInstructionDisplay("please write the first stanza")
+        }, 1500);
       }
     }
     else{
-      console.log("no sentences")
+      setInstructionDisplay("please write both lines")
+      setTimeout(() => {
+        setInstructionDisplay("please write the first stanza")
+      }, 1500);
     }
 
   }
   const submitSubsequentCouplet=(event)=>{
     event.stopPropagation();
     event.preventDefault();
+    console.log("submitsubseq")
     var lineOne = subsequentSentenceOne.current.value
     var lineTwo = subsequentSentenceTwo.current.value+ " "+ refrain;
+    if(subsequentSentenceOne.current.value.length>0&&subsequentSentenceTwo.current.value.length>0){
     console.log(lineOne + lineTwo)
     var couplet = [lineOne, lineTwo];
     socket.open();
     socket.emit("submitCouplet",couplet)
     setCoupletInputSubsequent("off")
+    }
+    else{
+      setInstructionDisplay("please write both lines")
+      setTimeout(() => {
+        setInstructionDisplay("please proceede to write the next stanza")
+        
+      }, 1500);
+    }
 
   }
   
@@ -385,7 +424,7 @@ return (
         <input ref={subsequentSentenceTwo} className="lineInput2" type="text"></input>
         <div className="refrainDiv">{refrain}</div>
         </div>
-        <input type="submi  t" value="submit couplet"></input>
+        <input type="submit" value="submit couplet"></input>
       </form>
 
     </div>

@@ -27,6 +27,44 @@ const PORT = process.env.PORT || 3001 ;
   var couplets = [["sdsdsdS", "dsdsdsdsdsdsds"] ];
   var currentPlayer="";
   var refrain =""
+  var subsequent = "off"
+
+  const nextPlayer = function(){
+    console.log("nextplayer2")
+    var players = Object.values(users)
+    console.log(players);
+
+    console.log("curret i")
+    console.log(i)
+
+    i++
+    console.log("next i")
+    console.log(i)
+
+   if (i>players.length-1){
+    i=0
+    console.log("i = 0 now")  
+  }
+    if(players[i]){
+      currentPlayer = players[i].name
+      console.log("currentplayer")
+      console.log(currentPlayer);
+      if(subsequent==="on"){
+        console.log("emitting subseq")
+      io.emit("nextPlayer",currentPlayer)}
+      else{
+        console.log("emittingfirst")
+        io.emit("nextPlayerFirst",currentPlayer)
+      }
+  }
+}
+
+  
+ const playerError = function(){ client.emit("playerError")
+ console.log("playerserror")
+ console.log();
+ nextPlayer();
+}
 
 
 
@@ -44,7 +82,7 @@ const PORT = process.env.PORT || 3001 ;
     if (usernames.indexOf(username)!==-1){
       console.log("useralreadyexists")
       client.emit("rejected")
-      client.disconnect();
+      // client.disconnect();
     }
     else{
       usernames.push(username)
@@ -58,13 +96,17 @@ const PORT = process.env.PORT || 3001 ;
         console.log(users)
         console.log(players)
         console.log(i)
+        if(players[i]){
         currentPlayer=players[i].name
         console.log(currentPlayer)
         console.log("start")
       client.emit("start", 
       {currentPlayer:currentPlayer,
       couplets:couplets}
-      )
+      )}
+      else{
+        playerError()
+      }
      }
     else{
       console.log("userslist2")
@@ -72,46 +114,29 @@ const PORT = process.env.PORT || 3001 ;
       var players = Object.values(users)
       console.log(players)
       console.log(i)
+      if(players[i]){
       currentPlayer=players[i].name
       console.log("play")
     client.emit("play",{
       currentPlayer:players[i].name,
       couplets:couplets,
-      refrain:refrain})
-  
-
-    
-  }
-}});
-  //when a player emit a sentence, it is received here and is broadcasted to others
-  client.on("sentence", sentence=>{
-      // console.log("received sentence")
-      // console.log(sentence)
-      // console.log(i)
-    sentences.push(sentence);
-    var players = Object.values(users)
-    currentPlayer=players[i].name
-
-    //broadcasted to otheres and also emit the next player in line to others
-    io.emit("sentenceBroadcast",{
-      text:sentence,
-      player:players[i].name,
-      refrain:refrain
-    })
-    // console.log("server emitted sentencec")
-    i++
-    if(i>players.length-1){
-        i=0
+      refrain:refrain})}
+      else{
+        playerError();
+      } 
     }
-})
+}});
+
 
 client.on("submitFirstCouplet", (coupletInfo)=>{
+  subsequent="on";
   couplets.push(coupletInfo.lines)
   var players = Object.values(users)
   refrain=coupletInfo.refrain
   console.log(i);
   console.log(players)
   console.log(refrain)
+  if(players[i]){
     currentPlayer=players[i].name
     io.emit("coupletBroadcast",{
       couplet:coupletInfo.lines,
@@ -122,22 +147,31 @@ client.on("submitFirstCouplet", (coupletInfo)=>{
   if(i>players.length-1){
       i=0
   }
+}
+else{playerError();
+  }
+
 })
 client.on("submitCouplet", (couplet)=>{
   var players = Object.values(users)
  
   couplets.push(couplet)
+  if(players[i]){
   currentPlayer=players[i].name
-
   io.emit("coupletBroadcast",{ 
-    couplet:couplet,
+  couplet:couplet,
   playerTurn:currentPlayer,
-refrain:refrain 
+  refrain:refrain 
  })
   i++
   if(i>players.length-1){
       i=0
+    }
   }
+  else{
+    playerError();
+  }
+
 })
 
 //the server receives the message
@@ -152,43 +186,34 @@ refrain:refrain
   });
 
   client.on("disconnect", () => {
-    var username = users[client.id];
+
+    var closedUser = users[client.id];
+    console.log("client.id......")
+    console.log(client.id)
+    console.log("users.....")
+
+    console.log(users)
+
+
     // username = username.username;
-    // console.log("loggedout")
-    // console.log(username)
+    console.log("closed user.....")
+    console.log(closedUser)
+    console.log(currentPlayer)
+  if (closedUser.name === currentPlayer){
     delete users[client.id];
+  console.log("nextplayer")
+   nextPlayer();
+  }
+  else{
+  delete users[client.id];}
+  console.log("users..........")
+  console.log(users)
 
     io.emit("disconnected", client.id);
-    if (username =  currentPlayer){
 
-    }
   });
 
-client.on("sendToGhost", (message)=>{
-  // console.log("ghost received")
-  // console.log(message);
-  io.emit
-  io.emit("message", {
-    text: message.message,
-    date: new Date().toISOString(),
-    user: message.username
-    
-  });
-  setTimeout(() => {
-  var quoteLength = quotes.length-1;
-  var randomNumber = Math.floor(Math.random() * quoteLength)
-  var ghostMessage = quotes[randomNumber]
-  io.emit("message",{
-    text:ghostMessage.quote,
-    date: new Date().toISOString(),
-    user:ghostMessage.name
 
-  })
-    
-  }, 100);
-  
-  
-})
 });
 
 // users.filter((user) => user.id!==id);
