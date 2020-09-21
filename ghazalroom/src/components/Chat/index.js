@@ -52,9 +52,7 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
     const [messages, setMessages] = useState([]);
 // this is the repository of all of the written couplets during the game
   const [allcouplets, setAllCouplets]=useState([])
-//this controls the final poem modal
-  const [poemModal, setPoemModal]=useState("off")
-//this controls the modal for the rules
+ //this controls the modal for the rules
  const [rules, setRules]=useState("off")
  //chatwindow
  const [chat, setChat]=useState("off")
@@ -336,12 +334,7 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
   }
   // {"profileImage "+(imageDisplay==="invisible"? 'sleep':'activate' )}
   //opens the modal for the entire poem
-  const openPoem = () =>{
-    setPoemModal("on")
-  }
-  const closePoem = () =>{
-    setPoemModal("off")
-  }
+
   //opens the modal for the rules modal
   const openRules = ()=>{
     setRules("on")
@@ -360,6 +353,17 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
 return (
 //everything
 <div className="allContainer">
+  <div className={"rulesModal "+(rules==="on"?"":"invisible")}>
+    <div className="closeRules" onClick={closeRules}>x</div>
+    <div className="rulesContent">
+    A traditional Ghazal consists of five to fifteen couplets, 
+    typically seven. A refrain (a repeated word or phrase) appears 
+    at the end of both lines of the first couplet and at the end of
+     the second line in each succeeding couplet. One or more words 
+       before the refrain are rhymes or partial rhymes.
+    </div>
+
+  </div>
   <div>{nameWarningText}</div>
   
   <div className="scroll">
@@ -429,8 +433,12 @@ return (
 
     </div>
     <div className="bottomScroll">
+    <button className={instructionDisplayVis==="on"?"":"invisible"}><a href={"data:text/plain;charset=utf-8, "+ JSON.stringify(allcouplets,null,1)} download="poem.txt">download poem</a></button>
+    <button className={instructionDisplayVis==="on"?"":"invisible"} onClick={openRules}>see rules of game</button>
+
     
     </div>
+
      
   </div>
 

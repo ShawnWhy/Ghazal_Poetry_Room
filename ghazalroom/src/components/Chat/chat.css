@@ -200,6 +200,39 @@ animation:scroll 1s both;
     text-align: center;
     display:flex;
 }
+.rulesContent{
+    position:fixed;
+    background-color:white;
+    top:30%;
+    left:25%;
+    width:50%;
+    height:60%;
+    overflow: hidden;
+}
+
+.rulesModal{
+    background-color:rgba(0, 0, 0, 0.452);
+    /* opacity: 80%; */
+    position:fixed;
+    z-index:2;
+    text-align:center;
+    height:100%;
+    width:100%;
+}
+.closeRules{
+    border:1px solid black;
+    background-color:white;
+    position:absolute;
+    padding:3%;
+
+    right:5%;
+    top:1%;
+}
+.closeRules:hover{
+    background-color:black;
+    color:white;
+}
+
 
 
 
