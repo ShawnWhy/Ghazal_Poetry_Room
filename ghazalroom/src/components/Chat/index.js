@@ -19,8 +19,13 @@ function Chat(){
 
 //     transports:["websocket","polling"]
 // });
+//variable for chatroom
+const [chatRoom, setChatRoom]=useState();
+//turn on the instruction display
 const [instructionDisplayVis, setInstructionDisplayVis]=useState("off");
+//sets the text for current instruction
 const [instructionDisplay, setInstructionDisplay]=useState("please wait")
+//the text for the refrain
 const [refrain, setRefrain]=useState("");
 const nameRef = useRef(); 
 const firstSentenceOne = useRef();
@@ -73,7 +78,10 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
     socket.connect();
     socket.on("connect", function () {
       // console.log("clientsideworks")
-      socket.emit("username", poetName);
+      socket.emit("username", {
+        name:poetName,
+        room:chatRoom
+      });
     });}
 
     socket.on("rejected",()=>{
@@ -125,12 +133,15 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
     socket.on("nextPlayer",(currentPlayer)=>{
       if(poetName===currentPlayer){
         setCoupletInputSubsequent("on")
+        setCurrentPlayer(currentPlayer);
       }
     
     })
     socket.on("nextPlayerFirst",(currentPlayer)=>{
       if(poetName===currentPlayer){
         setFirstCoupletInput("on")
+        setCurrentPlayer(currentPlayer);
+
       }
 
     })
@@ -221,12 +232,20 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
     event.preventDefault();
     event.stopPropagation();
     var poetName = nameRef.current.value;
+    var roomNumber = roomSelection.current.value
+    console.log(roomNumber); 
     console.log(poetName);
+    if(poetName.length>0&&roomNumber.length>0){
     setPoetName(poetName);
-
-
-   
- }
+    setChatRoom(roomNumber)
+  }
+  else{
+    setNameWarningText("please enter both name and room number")
+    setTimeout(() => {
+      setNameWarningText("")
+    }, 2000);
+  }
+}
  
 
   //emits the messageout
@@ -236,6 +255,7 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
     var newMessage = {
       message: message,
       username: poetName,
+      room:chatRoom
     };
     // console.log("messageout")
     // console.log(newMessage)
@@ -270,7 +290,8 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
         setRefrain(tempRefrain)
         var coupletInfo = {
           lines:couplet,
-          refrain:tempRefrain
+          refrain:tempRefrain,
+          room:chatRoom
         }
         console.log("coupletinfo")
         console.log(coupletInfo);
@@ -303,7 +324,9 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
     console.log(lineOne + lineTwo)
     var couplet = [lineOne, lineTwo];
     socket.open();
-    socket.emit("submitCouplet",couplet)
+    socket.emit("submitCouplet",{
+    couplet:couplet,
+    room:chatRoom})
     setCoupletInputSubsequent("off")
     }
     else{
@@ -317,21 +340,9 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
   }
   
 
-  //takes the value from the sentence input and sets it as a variable ready to emit
-  const TypeSentence = (e)=>{
-    e.preventDefault();
-    e.stopPropagation();
-    setCouplet(e.target.value);
-  }
 
-  //emits the sentence
-  const submitSentence = ()=>{
-    socket.open();
 
-    // console.log("sending sentence")
-    // console.log(sentence)
-    socket.emit("sentence",couplet )
-  }
+
   // {"profileImage "+(imageDisplay==="invisible"? 'sleep':'activate' )}
   //opens the modal for the entire poem
 
@@ -368,14 +379,14 @@ return (
   
   <div className="scroll">
     <div className="topScroll">
-      <p className={"ghazalTitle "+(session==="on"?"":"invisible")}><h1>Ghazal</h1></p>
+      <div className={"ghazalTitle "+(session==="on"?"":"invisible")}><h1>Ghazal</h1></div>
     <div className={"nameDiv "+(session==="on"?"invisible":"")}>
       <form className="nameForm" onSubmit={unrollScroll}>
       <p className="nameQuestion">oh poet, what would you like to be called?</p>
       <input ref={nameRef} type = "text" className="nameInputDiv"></input>
       <p className = "roomQuestion"> and which room do you deem fit to enter?</p>
-      <select className="roomSelection" >
-        <option disabled selected value></option>
+      <select ref={roomSelection} className="roomSelection" >
+        <option  value="" ></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
