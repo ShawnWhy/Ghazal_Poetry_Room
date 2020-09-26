@@ -65,13 +65,15 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
  //subsequent sentences
  //shows the current poet working on the poem
  const [currentPlayer, setCurrentPlayer]=useState("")
+ //player display
+ const [playerDisplay, setPlayerDisplay]=useState("off");
+ //room display
+ const [roomDisplay, setRoomDisplay]= useState("off")
+ //current player
+ const [CurrentPlayerDisplay, setCurrentPlayerDisplay]=useState("off")
+  
+ const poemHeight = useRef();
 
-// this happens automatically and changes when the 
-//username changes
-
-//   var chatWindow = reactDOM.
-
-// },[])
   useEffect(() => {
 
     if(poetName.length>0){
@@ -119,7 +121,20 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
       setSession("on"); 
       setTimeout(() => {
         setInstructionDisplayVis("on")
+        setPlayerDisplay("on")
       }, 1500);
+      setTimeout(()=>{
+        setPlayerDisplay("on")
+      },1600)
+      setTimeout(()=>{
+        setCurrentPlayerDisplay("on")
+      }
+      ,1800)
+      setTimeout(()=>{
+        setRoomDisplay("on")
+      }
+      ,2000)
+      
       if(info.currentPlayer===poetName){
         setTimeout(() => {
           setFirstCoupletInput("on")
@@ -154,7 +169,21 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
       
         setTimeout(() => {
           setInstructionDisplayVis("on")
+
         }, 1500);
+       
+        setTimeout(()=>{
+          setPlayerDisplay("on")
+        }
+        ,1600)
+        setTimeout(()=>{
+          setCurrentPlayerDisplay("on")
+        }
+        ,1800)
+        setTimeout(()=>{
+          setRoomDisplay("on")
+        }
+        ,2000)
 
       setSession("on"); 
       if(info.currentPlayer===poetName){
@@ -202,6 +231,8 @@ const [coupletInputSubsequent, setCoupletInputSubsequent]=useState("off")
       setRefrain(couplet.refrain);
       setAllCouplets((allCouplets) => [...allCouplets, couplet.couplet
       ])
+      poemHeight.current.scrollTop = poemHeight.current.scrollHeight;
+
       setCurrentPlayer(couplet.playerTurn)
 
       if (couplet.playerTurn===poetName){
@@ -391,26 +422,32 @@ return (
         <option value="2">2</option>
         <option value="3">3</option>
         <option value="4">4</option>
-        <option value="5">5</option>
 </select>
       <input type= "submit"className= "nameSubmit"></input>
       </form>
     </div>
     </div>
     <div className={"scrollSheet "+ (session==="on"?"scrollSheet2":"")}>
-    <h1 className={"instruction "+(instructionDisplayVis==="on"?"":"invisible")}>{instructionDisplay}</h1>
-    <div className={instructionDisplayVis==="on"?"":"invisible"}>
-        currebt player: {currentPlayer}
-        refrain: {refrain}
+    <div className= {"display "+(instructionDisplayVis==="on"?"":"invisible")}>
+        <div className={"infoDisplay "+(playerDisplay==="on"?"infoDisplay2":"invisibleInfo")}>greetings {poetName}</div>
+        <div className={"infoDisplay "+(CurrentPlayerDisplay==="on"?"infoDisplay2":"invisibleInfo")}>the current player in your room is : {currentPlayer}</div>
+        <div className={"infoDisplay "+(roomDisplay==="on"?"infoDisplay2":"invisibleInfo")}>your room number is : {chatRoom}</div>
+        <div className={"infoDisplay "+(refrain.length>0?"infoDisplay2":"invisibleInfo")}>the refrain is : {refrain}</div>
+
+        <div className="line"></div>
+
       </div>
+    <h1 className={"instruction "+(instructionDisplayVis==="on"?"":"invisible")}>{instructionDisplay}</h1>
+    
 
       <div className={"prevSentences "+(instructionDisplayVis==="on"?"":"invisible")}>
         {!allcouplets.length? (
           <div>all couplets</div>
         ):(
-          <div>
+          <div className="poem" ref={poemHeight}>
             {allcouplets.map((couplet,index)=>(
-              <div key={index}className="poem">
+              <div key={index}>
+                <div className="spaceBetween"></div>
               <div key={index +"1"}>{couplet[0]}</div>
               <div key={index + "2"}>{couplet[1]}</div>
               </div>
