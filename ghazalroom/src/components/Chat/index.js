@@ -12,13 +12,13 @@ function Chat(){
 
 
 
-  const socket = io("http://localhost:3001", {autoConnect:false,
-  transports: ["websocket", "polling"]
-});
-// const socket = openSocket ("wss://ladyleonorasgamingroom.herokuapp.com/",{autoConnect:false,
-
-//     transports:["websocket","polling"]
+  // const socket = io("http://localhost:3001", {autoConnect:false,
+  // transports: ["websocket", "polling"]
 // });
+const socket = openSocket ("wss://ghazalpoetryroom.herokuapp.com/",{autoConnect:false,
+
+    transports:["websocket","polling"]
+});
 //variable for chatroom
 const [chatRoom, setChatRoom]=useState();
 //turn on the instruction display
